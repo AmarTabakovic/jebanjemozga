@@ -16,6 +16,7 @@
 #define MEM_SIZE 32768
 
 #define REPL_PROMPT "\xE2\xB2\x96 > "
+#define EXIT_KEYWORD "exit\n"
 
 int memory_cells[MEM_SIZE];
 int current_cell = 0;
@@ -127,7 +128,7 @@ int init_file(char *file_name)
  * @brief
  *
  */
-void init_repl()
+int init_repl()
 {
     printf("jebanjemozga (REPL mode)\n"
            "(c) 2022 Amar Tabakovic\n");
@@ -142,6 +143,11 @@ void init_repl()
 
         while ((n_read = getline(&line, &len, stdin)) != -1)
         {
+            if (!strcmp(line, EXIT_KEYWORD)) {
+                return 0;
+            }
+
+            printf("%s\n", line);
             parse_brainfuck(line);
             printf(REPL_PROMPT);
         }
@@ -159,17 +165,17 @@ int main(int argc, char *argv[])
 {
     if (argc == 1)
     {
-        init_repl();
+        return init_repl();
     }
     else if (argc == 2)
     {
-        init_file(argv[1]);
+        return init_file(argv[1]);
     }
     else
     {
-        printf("%s: File error", argv[0]);
+        printf("%s: Too many arguments given", argv[0]);
         return 1;
     }
 
-    return 0;
+    return 1;
 }
