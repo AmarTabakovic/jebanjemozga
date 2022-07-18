@@ -22,10 +22,10 @@ int memory_cells[MEM_SIZE];
 int current_cell = 0;
 
 /**
- * @brief
+ * @brief Parses a given string according to the brainfuck rules.
  *
- * @param input
- * @return int
+ * @param input string in brainfuck format
+ * @return int 0 if no errors occured, 1 otherwise
  */
 int parse_brainfuck(char *input)
 {
@@ -94,10 +94,10 @@ int parse_brainfuck(char *input)
 }
 
 /**
- * @brief
+ * @brief Initializes the parsing process when an input file is given.
  *
- * @param file_name
- * @return int
+ * @param file_name file name of the file to parse
+ * @return int 0 if no errors occured, 1 otherwise
  */
 int init_file(char *file_name)
 {
@@ -125,8 +125,9 @@ int init_file(char *file_name)
 }
 
 /**
- * @brief
+ * @brief Initializes the parsing process with a REPL.
  *
+ * @return int 0 if no errors occured, 1 otherwise
  */
 int init_repl()
 {
@@ -143,11 +144,11 @@ int init_repl()
 
         while ((n_read = getline(&line, &len, stdin)) != -1)
         {
-            if (!strcmp(line, EXIT_KEYWORD)) {
+            if (!strcmp(line, EXIT_KEYWORD))
+            {
                 return 0;
             }
 
-            printf("%s\n", line);
             parse_brainfuck(line);
             printf(REPL_PROMPT);
         }
@@ -155,11 +156,11 @@ int init_repl()
 }
 
 /**
- * @brief
+ * @brief Entry point of the application.
  *
- * @param argc
- * @param argv
- * @return int
+ * @param argc number of command line arguments
+ * @param argv list of command line arguments
+ * @return int exit code
  */
 int main(int argc, char *argv[])
 {
