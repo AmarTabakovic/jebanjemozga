@@ -1,28 +1,35 @@
-# jebanjemozka
+# jebanjemozga
 A brainfuck interpreter.
 
 ## Usage
 ### Building
 ```plaintext
-$ make jebanjemozka
+$ make jebanjemozga
 ```
 
 ### Running
 #### With a `.bf` or `.b` file
 ```plaintext
-$ ./jebanjemozka [file_name]
+$ ./jebanjemozga [file_name]
 ```
 
 #### REPL
 ```plaintext
-$ ./jebanjemozka
+$ ./jebanjemozga
 ```
 
 Afterwards, a read-eval-print-loop prompt will open:
 
-```
+```plaintext
 $ ./jebanjemozka
 jebanjemozka (REPL mode)
 (c) 2022 Amar Tabakovic
 λ >
+```
+
+The prompt can be exited with `ctrl + d` or by entering `exit`:
+
+```plaintext
+λ > exit
+$
 ```
