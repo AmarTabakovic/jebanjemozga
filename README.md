@@ -21,8 +21,8 @@ $ ./jebanjemozga
 Afterwards, a read-eval-print-loop prompt will open:
 
 ```plaintext
-$ ./jebanjemozka
-jebanjemozka (REPL mode)
+$ ./jebanjemozga
+jebanjemozga (REPL mode)
 (c) 2022 Amar Tabakovic
 λ >
 ```
