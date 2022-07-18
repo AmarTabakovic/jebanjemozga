@@ -152,6 +152,7 @@ int init_repl()
             parse_brainfuck(line);
             printf(REPL_PROMPT);
         }
+        free(line);
     }
 }
 
