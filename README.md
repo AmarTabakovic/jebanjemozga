@@ -18,7 +18,7 @@ $ ./jebanjemozga [file_name]
 $ ./jebanjemozga
 ```
 
-Afterwards, a read-eval-print-loop prompt will open:
+Afterwards, a read-eval-print loop prompt will open:
 
 ```plaintext
 $ ./jebanjemozga
@@ -27,7 +27,7 @@ jebanjemozga (REPL mode)
 λ >
 ```
 
-The prompt can be exited with `ctrl + d` or by entering `exit`:
+The prompt can be exited with `ctrl` + `d` or by entering `exit`:
 
 ```plaintext
 λ > exit
