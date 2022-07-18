@@ -25,7 +25,7 @@ int current_cell = 0;
  * @brief Parses a given string according to the brainfuck rules.
  *
  * @param input string in brainfuck format
- * @return int 0 if no errors occured, 1 otherwise
+ * @return int 0 if no errors occurred, 1 otherwise
  */
 int parse_brainfuck(char *input)
 {
@@ -96,8 +96,8 @@ int parse_brainfuck(char *input)
 /**
  * @brief Initializes the parsing process when an input file is given.
  *
- * @param file_name file name of the file to parse
- * @return int 0 if no errors occured, 1 otherwise
+ * @param file_name name of the file to parse
+ * @return int 0 if no errors occurred, 1 otherwise
  */
 int init_file(char *file_name)
 {
@@ -127,7 +127,7 @@ int init_file(char *file_name)
 /**
  * @brief Initializes the parsing process with a REPL.
  *
- * @return int 0 if no errors occured, 1 otherwise
+ * @return int 0 if no errors occurred, 1 otherwise
  */
 int init_repl()
 {
