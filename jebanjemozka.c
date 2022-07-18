@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/file.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 #define MV_PTR_R '>'
 #define MV_PTR_L '<'
@@ -10,95 +13,144 @@
 #define JMP_IF_Z '['
 #define JMP_IF_NZ ']'
 
-/*
-Steps:
-1. Get filename
-2. Read text file content
-3. Parse text file content
-*/
+#define MEM_SIZE 32768
 
-/**
- * @brief Struct for matching bracket pairs.
- */
-struct bracket_pairs
-{
-    int left_bracket_pos;
-    int right_bracket_pos;
-};
-
-int memory_cells[30000];
+int memory_cells[MEM_SIZE];
 int current_cell = 0;
 
-struct bracket_pairs pairs[15000];
-
-// prints "Hello world!"
-char* example = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
-
-/*
-Idea: Use a stack to save position of "[" and pop whenever "]" appears. 
-Save all positions to a list of pairs. Surely there must a be a better way though.
-*/
-
 /**
- * @brief 
- * 
- * @return int 0 if parsing successful, 1 otherwise
+ * @brief
+ *
+ * @param input
+ * @return int
  */
-int parse_bracket_pairs() {
-
-    return 0;
-}
-
-/**
- * @brief 
- * 
- */
-void parse() {
-    for (size_t i = 0; i < strlen(example); i++)
+int parse_brainfuck(char *input)
+{
+    for (size_t i = 0; i < strlen(input); i++)
     {
-        switch (example[i]) {
-            case MV_PTR_R:
-                // TODO: Pointer out of bounds
-                current_cell++;
+        int brackets_count = 1;
+        switch (input[i])
+        {
+        case MV_PTR_R:
+            // TODO: Pointer out of bounds?
+            current_cell++;
             break;
-            case MV_PTR_L:
-                // TODO: Pointer out of bounds
-                current_cell--;
+        case MV_PTR_L:
+            // TODO: Pointer out of bounds?
+            current_cell--;
             break;
-            case INC_CELL:
-                memory_cells[current_cell]++;
+        case INC_CELL:
+            memory_cells[current_cell]++;
             break;
-            case DEC_CELL:
-                memory_cells[current_cell]--;
+        case DEC_CELL:
+            memory_cells[current_cell]--;
             break;
-            case INP_CHR:
-                memory_cells[current_cell] = getchar();
+        case INP_CHR:
+            memory_cells[current_cell] = getchar();
             break;
-            case OUT_CHR:
-                putchar(memory_cells[current_cell]);
+        case OUT_CHR:
+            putchar(memory_cells[current_cell]);
             break;
-            case JMP_IF_Z:
-                if (memory_cells[current_cell] == 0) {
-                    // TODO
+        case JMP_IF_Z:
+            if (memory_cells[current_cell] == 0)
+            {
+                while (brackets_count != 0)
+                {
+                    i++;
+                    if (input[i] == JMP_IF_Z)
+                    {
+                        brackets_count++;
+                    }
+                    else if (input[i] == JMP_IF_NZ)
+                    {
+                        brackets_count--;
+                    }
                 }
+            }
             break;
-            case JMP_IF_NZ:
-                if (memory_cells[current_cell] != 0) {
-                    // TODO
+        case JMP_IF_NZ:
+            if (memory_cells[current_cell] != 0)
+            {
+                while (brackets_count != 0)
+                {
+                    i--;
+                    if (input[i] == JMP_IF_Z)
+                    {
+                        brackets_count--;
+                    }
+                    else if (input[i] == JMP_IF_NZ)
+                    {
+                        brackets_count++;
+                    }
                 }
+            }
             break;
         }
     }
+    return 0;
 }
 
 /**
- * @brief 
- * 
- * @param argc 
- * @param argv 
- * @return int 
+ * @brief
+ *
+ * @param file_name
+ * @return int
  */
-int main(int argc, char* argv[]) {
-    parse();
+int init_file(char *file_name)
+{
+    FILE *file_pointer = fopen(file_name, "r");
+
+    if (file_pointer == NULL)
+    {
+        return 1;
+    }
+
+    // Source: https://stackoverflow.com/questions/14002954/c-programming-how-to-read-the-whole-file-contents-into-a-buffer
+    fseek(file_pointer, 0, SEEK_END);
+    long file_size = ftell(file_pointer);
+    rewind(file_pointer);
+
+    char *file_content = malloc(sizeof(char) * (file_size + 1));
+    fread(file_content, file_size, 1, file_pointer);
+    fclose(file_pointer);
+    file_content[file_size] = 0;
+
+    parse_brainfuck(file_content);
+    free(file_content);
+
     return 0;
+}
+
+/**
+ * @brief
+ *
+ */
+void init_repl()
+{
+    printf("jebanjemozka (REPL mode)\n");
+    printf("(c) 2022 Amar Tabakovic\n");
+}
+
+/**
+ * @brief
+ *
+ * @param argc
+ * @param argv
+ * @return int
+ */
+int main(int argc, char *argv[])
+{
+    if (argc == 1)
+    {
+        init_repl();
+    }
+    else if (argc == 2)
+    {
+        init_file(argv[1]);
+    }
+    else
+    {
+        printf("%s: File error", argv[0]);
+        return 1;
+    }
 }

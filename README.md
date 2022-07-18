@@ -1,8 +1,6 @@
 # jebanjemozka
 A brainfuck interpreter.
 
-_"Where there's a way, there's a day. And when there's a day, oh nay."_ - Amar Tabakovic, 2022
-
 ## Usage
 ### Building
 ```plaintext
@@ -10,7 +8,7 @@ $ make jebanjemozka
 ```
 
 ### Running
-#### With a `.bf` file
+#### With a `.bf` or `.b` file
 ```plaintext
 $ ./jebanjemozka [file_name]
 ```
@@ -23,11 +21,8 @@ $ ./jebanjemozka
 Afterwards, a read-eval-print-loop prompt will open:
 
 ```
-
+$ ./jebanjemozka
+jebanjemozka (REPL mode)
+(c) 2022 Amar Tabakovic
+λ >
 ```
-
-## TODO
-- [ ] Parsing and counting `[` and `]` occurences
-- [ ] File input (a single file name as command line argument)
-- [ ] REPL (no command line argument given)
-- [ ] Error handling
