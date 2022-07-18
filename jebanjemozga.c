@@ -15,6 +15,8 @@
 
 #define MEM_SIZE 32768
 
+#define REPL_PROMPT "\xE2\xB2\x96 > "
+
 int memory_cells[MEM_SIZE];
 int current_cell = 0;
 
@@ -52,9 +54,9 @@ int parse_brainfuck(char *input)
             putchar(memory_cells[current_cell]);
             break;
         case JMP_IF_Z:
-            if (memory_cells[current_cell] == 0)
+            if (!memory_cells[current_cell])
             {
-                while (brackets_count != 0)
+                while (brackets_count)
                 {
                     i++;
                     if (input[i] == JMP_IF_Z)
@@ -69,9 +71,9 @@ int parse_brainfuck(char *input)
             }
             break;
         case JMP_IF_NZ:
-            if (memory_cells[current_cell] != 0)
+            if (memory_cells[current_cell])
             {
-                while (brackets_count != 0)
+                while (brackets_count)
                 {
                     i--;
                     if (input[i] == JMP_IF_Z)
@@ -127,8 +129,23 @@ int init_file(char *file_name)
  */
 void init_repl()
 {
-    printf("jebanjemozka (REPL mode)\n");
-    printf("(c) 2022 Amar Tabakovic\n");
+    printf("jebanjemozga (REPL mode)\n"
+           "(c) 2022 Amar Tabakovic\n");
+
+    while (1)
+    {
+        char *line = NULL;
+        size_t len = 0;
+        ssize_t n_read;
+
+        printf(REPL_PROMPT);
+
+        while ((n_read = getline(&line, &len, stdin)) != -1)
+        {
+            parse_brainfuck(line);
+            printf(REPL_PROMPT);
+        }
+    }
 }
 
 /**
@@ -153,4 +170,6 @@ int main(int argc, char *argv[])
         printf("%s: File error", argv[0]);
         return 1;
     }
+
+    return 0;
 }

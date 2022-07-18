@@ -1,14 +1,14 @@
 CC = gcc 
-TARGET = jebanjemozka.c -o jebanjemozka
+TARGET = jebanjemozga.c -o jebanjemozga
 ERRORS = -Wall -Wextra -pedantic-errors
 
 .PHONY: clean
 
-jebanjemozka: jebanjemozka.c
+jebanjemozka: jebanjemozga.c
 		${CC} ${TARGET} -O3
 
-debug: jebanjemozka.c
+debug: jebanjemozga.c
 		${CC} ${TARGET} ${ERRORS} -Og
 
 clean:
-		rm -f jebanjemozka	
+		rm -f jebanjemozga	
