@@ -130,7 +130,7 @@ int init_file(char *file_name)
 
 /**
  * @brief Initializes the parsing process with a REPL.
- * 
+ *
  * TODO: Still kinda broken
  *
  * @return int 0 if no errors occurred, 1 otherwise
@@ -141,7 +141,7 @@ int init_repl()
            "(c) 2022 Amar Tabakovic\n");
 
     char *commands = malloc(sizeof(char));
-    commands[0] = '\0'; 
+    commands[0] = '\0';
     size_t position = 0;
 
     while (1)
@@ -162,7 +162,8 @@ int init_repl()
             }
 
             // Remove new line from read line
-            if( line[n_read - 1] == '\n' ) {
+            if (line[n_read - 1] == '\n')
+            {
                 line[n_read - 1] = '\0';
             }
 
