@@ -25,11 +25,12 @@ int current_cell = 0;
  * @brief Parses a given string according to the brainfuck rules.
  *
  * @param input string in brainfuck format
+ * @param position reference to the current command position
  * @return int 0 if no errors occurred, 1 otherwise
  */
-int parse_brainfuck(char *input)
+int parse_brainfuck(char *input, size_t *position)
 {
-    for (size_t i = 0; i < strlen(input); i++)
+    for (size_t i = *position; i < strlen(input); i++)
     {
         int brackets_count = 1;
         switch (input[i])
@@ -89,6 +90,7 @@ int parse_brainfuck(char *input)
             }
             break;
         }
+        *position = i;
     }
     return 0;
 }
@@ -118,7 +120,9 @@ int init_file(char *file_name)
     fclose(file_pointer);
     file_content[file_size] = 0;
 
-    parse_brainfuck(file_content);
+    size_t position = 0;
+
+    parse_brainfuck(file_content, &position);
     free(file_content);
 
     return 0;
@@ -126,6 +130,8 @@ int init_file(char *file_name)
 
 /**
  * @brief Initializes the parsing process with a REPL.
+ * 
+ * TODO: Still kinda broken
  *
  * @return int 0 if no errors occurred, 1 otherwise
  */
@@ -133,6 +139,10 @@ int init_repl()
 {
     printf("jebanjemozga (REPL mode)\n"
            "(c) 2022 Amar Tabakovic\n");
+
+    char *commands = malloc(sizeof(char));
+    commands[0] = '\0'; 
+    size_t position = 0;
 
     while (1)
     {
@@ -146,14 +156,28 @@ int init_repl()
         {
             if (!strcmp(line, EXIT_KEYWORD))
             {
+                free(line);
+                free(commands);
                 return 0;
             }
 
-            parse_brainfuck(line);
+            // Remove new line from read line
+            if( line[n_read - 1] == '\n' ) {
+                line[n_read - 1] = '\0';
+            }
+
+            // Resize commands string and concatenate read line
+            commands = realloc(commands, strlen(commands) + strlen(line));
+            strcat(commands, line);
+
+            parse_brainfuck(commands, &position);
             printf(REPL_PROMPT);
         }
         free(line);
     }
+
+    free(commands);
+    return 1;
 }
 
 /**
