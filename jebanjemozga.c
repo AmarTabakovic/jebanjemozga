@@ -145,35 +145,32 @@ int init_repl()
     commands[0] = '\0';
     size_t position = 0;
 
-    while (1)
+    size_t len = 0;
+    ssize_t n_read;
+
+    printf(REPL_PROMPT);
+
+    while ((n_read = getline(&line, &len, stdin)) != -1)
     {
-        size_t len = 0;
-        ssize_t n_read;
-
-        printf(REPL_PROMPT);
-
-        while ((n_read = getline(&line, &len, stdin)) != -1)
+        if (!strcmp(line, EXIT_KEYWORD))
         {
-            if (!strcmp(line, EXIT_KEYWORD))
-            {
-                free(line);
-                free(commands);
-                return 0;
-            }
-
-            // Remove new line from read line
-            if (line[n_read - 1] == '\n')
-            {
-                line[n_read - 1] = '\0';
-            }
-
-            // Resize commands string and concatenate read line
-            commands = realloc(commands, strlen(commands) + strlen(line));
-            strcat(commands, line);
-
-            parse_brainfuck(commands, &position);
-            printf(REPL_PROMPT);
+            free(line);
+            free(commands);
+            return 0;
         }
+
+        // Remove new line from read line
+        if (line[n_read - 1] == '\n')
+        {
+            line[n_read - 1] = '\0';
+        }
+
+        // Resize commands string and concatenate read line
+        commands = realloc(commands, strlen(commands) + strlen(line));
+        strcat(commands, line);
+
+        parse_brainfuck(commands, &position);
+        printf(REPL_PROMPT);
     }
 
     free(line);
