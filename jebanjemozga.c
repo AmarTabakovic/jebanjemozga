@@ -175,7 +175,7 @@ int init_repl()
 
     free(line);
     free(commands);
-    return 1;
+    return 0;
 }
 
 /**
