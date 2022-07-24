@@ -141,12 +141,12 @@ int init_repl()
            "(c) 2022 Amar Tabakovic\n");
 
     char *commands = malloc(sizeof(char));
+    char *line = NULL;
     commands[0] = '\0';
     size_t position = 0;
 
     while (1)
     {
-        char *line = NULL;
         size_t len = 0;
         ssize_t n_read;
 
@@ -174,9 +174,9 @@ int init_repl()
             parse_brainfuck(commands, &position);
             printf(REPL_PROMPT);
         }
-        free(line);
     }
 
+    free(line);
     free(commands);
     return 1;
 }
