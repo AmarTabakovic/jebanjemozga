@@ -36,11 +36,13 @@ int parse_brainfuck(char *input, size_t *position)
         switch (input[i])
         {
         case MV_PTR_R:
-            // TODO: Pointer out of bounds?
+            if (current_cell > MEM_SIZE - 1)
+                return 1;
             current_cell++;
             break;
         case MV_PTR_L:
-            // TODO: Pointer out of bounds?
+            if (current_cell > MEM_SIZE - 1)
+                return 1;
             current_cell--;
             break;
         case INC_CELL:
@@ -62,13 +64,9 @@ int parse_brainfuck(char *input, size_t *position)
                 {
                     i++;
                     if (input[i] == JMP_IF_Z)
-                    {
                         brackets_count++;
-                    }
                     else if (input[i] == JMP_IF_NZ)
-                    {
                         brackets_count--;
-                    }
                 }
             }
             break;
@@ -79,13 +77,9 @@ int parse_brainfuck(char *input, size_t *position)
                 {
                     i--;
                     if (input[i] == JMP_IF_Z)
-                    {
                         brackets_count--;
-                    }
                     else if (input[i] == JMP_IF_NZ)
-                    {
                         brackets_count++;
-                    }
                 }
             }
             break;
@@ -106,9 +100,7 @@ int init_file(char *file_name)
     FILE *file_pointer = fopen(file_name, "r");
 
     if (file_pointer == NULL)
-    {
         return 1;
-    }
 
     // Source: https://stackoverflow.com/questions/14002954/c-programming-how-to-read-the-whole-file-contents-into-a-buffer
     fseek(file_pointer, 0, SEEK_END);
@@ -122,10 +114,10 @@ int init_file(char *file_name)
 
     size_t position = 0;
 
-    parse_brainfuck(file_content, &position);
+    int ret = parse_brainfuck(file_content, &position);
     free(file_content);
 
-    return 0;
+    return ret;
 }
 
 /**
@@ -152,6 +144,7 @@ int init_repl()
 
     while ((n_read = getline(&line, &len, stdin)) != -1)
     {
+        // If "exit" was entered
         if (!strcmp(line, EXIT_KEYWORD))
         {
             free(line);
@@ -161,15 +154,15 @@ int init_repl()
 
         // Remove new line from read line
         if (line[n_read - 1] == '\n')
-        {
             line[n_read - 1] = '\0';
-        }
 
-        // Resize commands string and concatenate read line
+        // Resize commands string and concatenate newly read line
         commands = realloc(commands, strlen(commands) + strlen(line));
         strcat(commands, line);
 
-        parse_brainfuck(commands, &position);
+        if (parse_brainfuck(commands, &position) != 0)
+            return 1;
+
         printf(REPL_PROMPT);
     }
 
@@ -188,18 +181,10 @@ int init_repl()
 int main(int argc, char *argv[])
 {
     if (argc == 1)
-    {
         return init_repl();
-    }
     else if (argc == 2)
-    {
         return init_file(argv[1]);
-    }
-    else
-    {
-        printf("%s: Too many arguments given", argv[0]);
-        return 1;
-    }
 
+    printf("%s: Too many arguments given", argv[0]);
     return 1;
 }
