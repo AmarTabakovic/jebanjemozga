@@ -36,11 +36,13 @@ int parse_brainfuck(char *input, size_t *position)
         switch (input[i])
         {
         case MV_PTR_R:
+            // Current cell position goes beyond cell array size
             if (current_cell > MEM_SIZE - 1)
                 return 1;
             current_cell++;
             break;
         case MV_PTR_L:
+            // Current cell position goes beyond cell array size
             if (current_cell > MEM_SIZE - 1)
                 return 1;
             current_cell--;
@@ -123,8 +125,6 @@ int init_file(char *file_name)
 /**
  * @brief Initializes the parsing process with a REPL.
  *
- * TODO: Still kinda broken
- *
  * @return int 0 if no errors occurred, 1 otherwise
  */
 int init_repl()
@@ -151,10 +151,6 @@ int init_repl()
             free(commands);
             return 0;
         }
-
-        // Remove new line from read line
-        if (line[n_read - 1] == '\n')
-            line[n_read - 1] = '\0';
 
         // Resize commands string and concatenate newly read line
         commands = realloc(commands, strlen(commands) + strlen(line));
