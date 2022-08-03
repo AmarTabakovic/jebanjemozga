@@ -157,7 +157,11 @@ int init_repl()
         strcat(commands, line);
 
         if (parse_brainfuck(commands, &position) != 0)
+        {
+            free(line);
+            free(commands);
             return 1;
+        }
 
         printf(REPL_PROMPT);
     }
