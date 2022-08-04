@@ -4,7 +4,7 @@ ERRORS = -Wall -Wextra -pedantic-errors
 
 .PHONY: clean
 
-jebanjemozka: jebanjemozga.c
+jebanjemozga: jebanjemozga.c
 		${CC} ${TARGET} -O3
 
 debug: jebanjemozga.c
