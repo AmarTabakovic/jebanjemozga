@@ -163,7 +163,7 @@ int init_repl()
             return 1;
         }
 
-        printf(REPL_PROMPT);
+        printf("\n" REPL_PROMPT);
     }
 
     free(line);
