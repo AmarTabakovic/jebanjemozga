@@ -37,13 +37,13 @@ int parse_brainfuck(char *input, size_t *position)
         {
         case MV_PTR_R:
             // Current cell position goes beyond cell array size
-            if (current_cell > MEM_SIZE - 1)
+            if (current_cell == MEM_SIZE - 1)
                 return 1;
             current_cell++;
             break;
         case MV_PTR_L:
-            // Current cell position goes beyond cell array size
-            if (current_cell > MEM_SIZE - 1)
+            // Current cell position goes below cell array size
+            if (current_cell == 0)
                 return 1;
             current_cell--;
             break;
